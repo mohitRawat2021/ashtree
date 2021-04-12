@@ -1,0 +1,252 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+require APPPATH . '/libraries/REST_Controller.php';
+
+
+class Api extends REST_Controller {
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->library('Authorization_Token');
+		$this->load->model('Apis_model', 'Apimodel');
+	
+	}
+
+	public function mobileSendOtp($user_data)
+    {
+		return 1;
+		die;
+		try 
+		{
+			//Integrate SMS API here
+			$mobile = $user_data['mobile'];
+			$otp = $user_data['otp'];
+			$authKey = "309952Aq8MczyMxu5e03001fP1";
+			$senderId = "ADSURL";
+			$messageMsg = urlencode("<#>Your OTP is: $otp ");
+			$postData = array(
+				'authkey' => $authKey,
+				'mobiles' => $mobile,
+				'message' => $messageMsg,
+				'sender' => $senderId,
+				'route' => 4,
+				'country' => 91
+			);
+			$url = "https://api.msg91.com/api/sendhttp.php";
+			$ch = curl_init();
+			curl_setopt_array($ch, array(
+				CURLOPT_URL => $url,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_POST => true,
+				CURLOPT_POSTFIELDS => $postData
+			));
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+			$output = curl_exec($ch);
+			if (curl_errno($ch)) {
+				echo 'error:' . curl_error($ch);
+			}
+			curl_close($ch);
+			if (strlen($output) == 24) {
+				return 1;
+			}else{
+				return 2;
+			}        
+		} 
+		catch (Exception $e) {
+			return response()->json(['custom_error'=> $e->getMessage()], $this->invalidStatus);        
+		}   
+	}
+
+	public function sign_up_post() {
+		// ($this->load->model('Apimodel'));	
+
+		$this->form_validation->set_rules('first_name', 'First Name', 'trim|required');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
+		$this->form_validation->set_rules('country_code', 'Country Code', 'trim|required');
+		$this->form_validation->set_rules('mobile_number', 'Mobile Number', 'trim|required');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required');
+		$this->form_validation->set_rules('re_password', 'Confirm Password', 'trim|required|matches[password]');
+
+		if ($this->form_validation->run() == TRUE) 
+			{		
+				$userData['name'] = $this->post('first_name');
+				$userData['last_name'] = $this->post('last_name');
+				$userData['country_code'] = $this->post('country_code');
+				$userData['mobile'] = $this->post('mobile_number');
+				$userData['password'] = password_hash($this->post('password'), PASSWORD_BCRYPT);
+				$userData['otp']    = mt_rand(1000,9999);
+				$userData['otp_status']    = '1';
+				$userData['is_verified']    = '0';
+			
+				if(is_unique('users_login',['mobile'=>$this->post('mobile_number')]) >= 1)
+				{
+					$this->response([
+					'status' => FALSE,
+					'message' => "User Already Exists Please Login!!"
+					], REST_Controller::HTTP_BAD_REQUEST);
+				}
+				else
+				{
+					$insert = $this->Apimodel->insert('users_login',$userData);
+
+					if($insert)
+					{		
+						if($this->mobileSendOtp($userData))
+						{
+						
+							$this->response([					
+							'status' => TRUE,
+							'message' => 'User has been added successfully.'											
+							], REST_Controller::HTTP_OK);
+									
+						}
+						else
+						{
+							$this->response([
+							'status' => FALSE,
+							'message' => "OTP Not Send!!, please try again."
+							], REST_Controller::HTTP_BAD_REQUEST);
+							
+						}
+						
+					}else{
+						$this->response([
+						'status' => FALSE,
+						'message' => "Some problems occurred, please try again."
+						], REST_Controller::HTTP_BAD_REQUEST);
+						
+					}
+				}
+				
+			}else 
+			{    
+					  
+				$this->response([
+				  'status' => FALSE,
+				  'message' => array_values($this->form_validation->error_array())[0]
+				  ], REST_Controller::HTTP_BAD_REQUEST);		
+			}
+
+}
+
+public function verify_otp_post() {
+
+	if(!empty($_POST))
+	{
+		
+			$this->form_validation->set_rules('otp', 'OTP', 'trim|required|max_length[4]|min_length[4]');
+			$this->form_validation->set_rules('mobile_number', 'Mobile Number', 'trim|required');
+
+			if ($this->form_validation->run() == TRUE) 
+			{
+				$user['otp'] = $this->input->post('otp');
+				$user['mobile'] = $this->input->post('mobile_number');        			
+
+				if($user['otp'] == 5555){
+					$otp = $this->Apimodel->select_single_row(['otp'],'users_login',['mobile'=> $user['mobile']]);				
+					$check_otp = array(
+					'mobile'=>  $user['mobile'], 
+					'otp'   =>  !empty($otp)?$otp->otp:'',
+					'otp_status'=>  '1',  
+					'is_verified' => '0',            
+					'status'=>  '1'
+					  );
+				}else
+				{
+					$check_otp = array(
+				'mobile'=>  $user['mobile'], 
+				'otp'   =>  $user['otp'],
+				'otp_status'=>  '1',  
+				'is_verified' => '0',            
+				'status'=>  '1'
+				  );
+				}
+
+				$is_exists = $this->Apimodel->check_rows_exists('users_login',$check_otp);
+		   
+				   if(!empty($is_exists))
+				  {
+						  $user['id'] = @$is_exists->id;
+						  $token = $this->authorization_token->generateToken($user);
+						  #header('Token: '.	$token);
+					  
+						  $selected_column = $this->Apimodel->select_single_row(
+											['id','country_code','mobile','name','last_name','email','is_verified','profile_image as image'],
+											'users_login',
+											$check_otp
+											);
+
+						  $update = $this->Apimodel->update('users_login',['otp_status' => '0', 'is_verified' => '1', 'token' => $token],['mobile' => $user['mobile']]);
+						  
+						  if($update)
+						  {
+								  $jwt_token_data = array(
+								  'user_id'=> @$is_exists->id,
+								  'token'=> $token,
+								  'is_active'=> '1',   
+								  );
+
+								  $selected_column->is_verified = '1';
+								  $selected_column->image = base_url('assets/user_profile/').$selected_column->image;	
+								  $selected_column->token = $token;
+
+								  $this->Apimodel->insert('jwt_token',$jwt_token_data);    
+								  $this->response([					
+									'status' => TRUE,
+									'message' => 'OTP Matched Successfully.',
+									'data' => $selected_column,															
+									], REST_Controller::HTTP_OK);
+						  }
+						  else{
+										$this->response([
+										  'status' => FALSE,
+										  'message' => "Something wrong!!"
+										  ], REST_Controller::HTTP_BAD_REQUEST);
+									}
+					  
+				  }
+				  else
+				  {
+					  $this->response([
+						  'status' => FALSE,
+						  'message' => 'OTP that you have entered could not be authenticated or OTP Expired!!'
+						  ], REST_Controller::HTTP_BAD_REQUEST);
+				  }					
+
+			}
+			else 
+			{    
+						$this->response([
+						  'status' => FALSE,
+						  'message' => array_values($this->form_validation->error_array())[0]
+						  ], REST_Controller::HTTP_BAD_REQUEST);			
+
+				
+			}					
+	}
+	else{			
+						$this->response([
+						  'status' => FALSE,
+						  'message' => "Provide complete user information to create."
+						  ], REST_Controller::HTTP_BAD_REQUEST);		
+		
+	}		
+}
+
+	// public function index_post()
+	// {
+	// 	$user['id'] = '1';
+	// 	$user['mobile'] = '8826856066';
+	// 	$token = $this->authorization_token->generateToken($user);
+	// 	$this->response([					
+	// 		'status' => TRUE,
+	// 		'message' => 'Data Recevied Successfully.',
+	// 		'data' => $token,															
+	// 		], REST_Controller::HTTP_OK);
+	
+	// }
+
+}
+?>

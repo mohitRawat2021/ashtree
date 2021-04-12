@@ -1,0 +1,13 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Vender extends MY_Controller {
+
+	public function index()
+	{
+		$this->load->view('first_page/loginhead');
+		$this->load->view('first_page/types');
+	}	
+
+}
+?>

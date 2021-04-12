@@ -1,0 +1,29 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+require APPPATH . '/libraries/REST_Controller.php';
+
+class Api extends REST_Controller {
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('Api_Model');
+		$this->load->library('Authorization_Token');
+	}
+
+	public function index_post()
+	{
+		$user['id'] = '1';
+		$user['mobile'] = '8826856066';
+		$token = $this->authorization_token->generateToken($user);
+		$this->response([					
+			'status' => TRUE,
+			'message' => 'Data Recevied Successfully.',
+			'data' => $token,															
+			], REST_Controller::HTTP_OK);
+	
+	}
+
+}
+?>
