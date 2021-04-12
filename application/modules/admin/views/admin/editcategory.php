@@ -12,7 +12,7 @@
             </div>
             <div class="col-sm-3">
                 <div class="btn-group float-sm-right">
-                    <a href="<?=base_url('malls')?>" class="btn btn-outline-primary waves-effect waves-light">Malls List</a>
+                    <a href="<?=base_url('admin/category')?>" class="btn btn-outline-primary waves-effect waves-light">Category List</a>
                 </div>
             </div>
         </div>
@@ -26,17 +26,7 @@
                         <div class="card-title">Edit Category Name</div>
                         <hr>
                         <form method="post" action="<?=base_url('admin/edit_category/').$this->uri->segment(3)?>" id="" enctype="multipart/form-data">
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Category Type</label>
-                                    <div class="col-sm-3">
-                                    <label class="radio-inline ch_type">
-                                        <input id="che_type" type="radio" name="type" value="0" <?=$category_details->type == "0" ? 'checked' : '' ?> >Store
-                                    </label>
-                                    <label class="radio-inline ch_type">
-                                        <input id="che_type" type="radio" name="type" value="1" <?=$category_details->type == "1" ? 'checked' : '' ?>>Restaurant
-                                    </label>                                  
-                                    </div>
-                            </div> 
+                           
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Category Name</label>
                                 <div class="col-sm-3">

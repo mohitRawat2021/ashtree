@@ -58,10 +58,13 @@
                    <a href="<?=base_url('admin/dashboard')?>"><i class="fa fa-dashcube"></i>Dashboard</a>
                 </li>
                 <li>
-                   <a href="<?=base_url('admin/category')?>"><i class="fa fa-dashcube"></i>Manage Category</a>
+                   <a href="<?=base_url('admin/category')?>"><i class="fa fa-dashcube"></i>Categories Management</a>
                 </li>
-                <li>
+                <!-- <li>
                    <a href="<?=base_url('admin/sub_category')?>"><i class="fa fa-dashcube"></i>Manage Sub-Category</a>
+                </li> -->
+                <li>
+                   <a href="<?=base_url('admin/lab_test')?>"><i class="fa fa-dashcube"></i>Lab Test Management</a>
                 </li>
                 <li>
                     <a href="#" class="waves-effect">
@@ -72,32 +75,20 @@
                         <li><a href="<?=base_url('admin/registration_requests')?>"><i class="fa fa-circle-o-notch"></i>Registration Request</a></li>
                         <li><a href="<?=base_url('admin/product_requests')?>"><i class="fa fa-circle-o-notch"></i>Product Request</a></li>
                     </ul>
-                </li>
-                <!-- <li>
-                   <a href="<?=base_url('admin/registration_requests')?>"><i class="fa fa-dashcube"></i>Registration Request</a>
-                </li>
-                <li>
-                   <a href="<?=base_url('admin/product_requests')?>"><i class="fa fa-dashcube"></i>Product Request</a>
-                </li> -->
+                </li>             
                 <li>
                    <a href="<?=base_url('admin/manage_user')?>"><i class="fa fa-dashcube"></i>User Management</a>
-                </li>
-                <li>
-                   <a href="<?=base_url('admin/manage_store')?>"><i class="fa fa-dashcube"></i>Store Management</a>
-                </li>
-                <li>
+                </li>                
+                <!-- <li>
                    <a href="<?=base_url('admin/manage_restaurant')?>"><i class="fa fa-dashcube"></i>Restaurant Management</a>
-                </li>
-                <li>
-                   <a href="<?=base_url('admin/delivery_boy')?>"><i class="fa fa-dashcube"></i>Delivery Boy Management</a>
-                </li>
+                </li> -->               
                 <li>
                    <a href="<?=base_url('admin/coupon')?>"><i class="fa fa-dashcube"></i>Manage Coupon</a>
                 </li>
                 <li>
                    <a href="<?=base_url('admin/notification')?>"><i class="fa fa-dashcube"></i>Manage Notification</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="#" class="waves-effect">
                         <i class="fa fa-shopping-cart"></i>
                         <span>Orders Management</span> <i class="fa fa-angle-left pull-right"></i>
@@ -107,7 +98,7 @@
                         <li><a href="<?=base_url('admin/ongoing_orders')?>"><i class="fa fa-circle-o-notch"></i>On-going Orders</a></li>
                         <li><a href="<?=base_url('admin/complete_orders')?>"><i class="fa fa-circle-o-notch"></i>Past Orders</a></li>
                     </ul>
-                </li>
+                </li> -->
                 <li>
                     <a href="<?=base_url('admin/manage_faq')?>"><i class="fa fa-dashcube"></i>FAQ's</a>
                 </li>

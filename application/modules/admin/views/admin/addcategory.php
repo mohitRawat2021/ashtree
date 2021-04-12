@@ -26,17 +26,7 @@
                         <div class="card-title">Add Category Details</div>
                         <hr>
                         <form method="post" action="<?=base_url('admin/addCategory')?>" id="" enctype="multipart/form-data">
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Category Type</label>
-                                    <div class="col-sm-3">
-                                    <label class="radio-inline ch_type">
-                                        <input id="che_type" type="radio" name="type" value="0" checked>Store
-                                    </label>
-                                    <label class="radio-inline ch_type">
-                                        <input id="che_type" type="radio" name="type" value="1">Restaurant
-                                    </label>                                  
-                                    </div>
-                            </div> 
+                           
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Category Name</label>
                                 <div class="col-sm-3">

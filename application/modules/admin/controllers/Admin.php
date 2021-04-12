@@ -161,66 +161,66 @@ class Admin extends MY_Controller {
 		redirect('admin');	
 	}
 
-	public function registration_requests()
-	{
-		checkadminlogin();
-		$data['select_request'] = $this->Admin_Model->select('users',['usertype !='=>'0','is_verified'=>'1','user_status'=>'0','status'=>'1','is_deleted'=>'0']);		
-		myview('admin/registration_request',$data);
-	}
+	// public function registration_requests()
+	// {
+	// 	checkadminlogin();
+	// 	$data['select_request'] = $this->Admin_Model->select('users',['usertype !='=>'0','is_verified'=>'1','user_status'=>'0','status'=>'1','is_deleted'=>'0']);		
+	// 	myview('admin/registration_request',$data);
+	// }
 
 	
-	public function action_request($action='',$id='')
-	{
-		checkadminlogin();		
-		if(!empty($action) || !empty($id))
-		{
-			$action = base64_decode($action);
-			$id = base64_decode($id);			
-			$this->Admin_Model->update('users',['user_status'=>$action],['id'=>$id]);
-		}
-		else
-		{
-			redirect('admin/registration_requests');
-		}
-		redirect('admin/registration_requests');
-	}
+	// public function action_request($action='',$id='')
+	// {
+	// 	checkadminlogin();		
+	// 	if(!empty($action) || !empty($id))
+	// 	{
+	// 		$action = base64_decode($action);
+	// 		$id = base64_decode($id);			
+	// 		$this->Admin_Model->update('users',['user_status'=>$action],['id'=>$id]);
+	// 	}
+	// 	else
+	// 	{
+	// 		redirect('admin/registration_requests');
+	// 	}
+	// 	redirect('admin/registration_requests');
+	// }
 
-	public function view_details($id='')
-	{
-		checkadminlogin();		
-		if(!empty($id))
-		{
-			$id = base64_decode($id);			
-			$get_usertype = $this->Admin_Model->selectrow('users',['id'=>$id]);
-			if($get_usertype->usertype === '1') //1=store
-			{
-				$data['store_details'] =  $this->Admin_Model->selectrow('users',['id'=>$id]);
-				myview('admin/view_store_details',$data);
-			}
-			else if($get_usertype->usertype === '2') //2=restaurant
-			{
-				$data['restaurant_details'] =  $this->Admin_Model->triple_join_select('u.*,rt.open_time,rt.close_time,ra.street1,ra.street2,ra.city,ra.country',
-																					  'users as u',
-																					  'restaurant_timings as rt',
-																					  'restaurant_address as ra',
-																					  'u.id=rt.restaurant_id',
-																					  'u.id=ra.restaurant_id',
-																					  'left',
-																					  'left',
-																					  ['u.is_verified=>"1"','u.id'=>$id]
-																					);
-				myview('admin/view_restaurant_details',$data);
-			}
-			else
-			{
-				redirect('admin/registration_requests');
-			}	
-		}
-		else
-		{
-			redirect('admin/registration_requests');
-		}
-	}
+	// public function view_details($id='')
+	// {
+	// 	checkadminlogin();		
+	// 	if(!empty($id))
+	// 	{
+	// 		$id = base64_decode($id);			
+	// 		$get_usertype = $this->Admin_Model->selectrow('users',['id'=>$id]);
+	// 		if($get_usertype->usertype === '1') //1=store
+	// 		{
+	// 			$data['store_details'] =  $this->Admin_Model->selectrow('users',['id'=>$id]);
+	// 			myview('admin/view_store_details',$data);
+	// 		}
+	// 		else if($get_usertype->usertype === '2') //2=restaurant
+	// 		{
+	// 			$data['restaurant_details'] =  $this->Admin_Model->triple_join_select('u.*,rt.open_time,rt.close_time,ra.street1,ra.street2,ra.city,ra.country',
+	// 																				  'users as u',
+	// 																				  'restaurant_timings as rt',
+	// 																				  'restaurant_address as ra',
+	// 																				  'u.id=rt.restaurant_id',
+	// 																				  'u.id=ra.restaurant_id',
+	// 																				  'left',
+	// 																				  'left',
+	// 																				  ['u.is_verified=>"1"','u.id'=>$id]
+	// 																				);
+	// 			myview('admin/view_restaurant_details',$data);
+	// 		}
+	// 		else
+	// 		{
+	// 			redirect('admin/registration_requests');
+	// 		}	
+	// 	}
+	// 	else
+	// 	{
+	// 		redirect('admin/registration_requests');
+	// 	}
+	// }
 
 	public function category()
 	{
@@ -248,8 +248,7 @@ class Admin extends MY_Controller {
 				$image_data = uploadfile('img','assets/category_img/');	
 				#pr($image_data);			
 				$data = array(
-								'name' => ucfirst($this->input->post('name')),
-								'type' => $this->input->post('type'),								
+								'name' => ucfirst($this->input->post('name')),						
 								'img' => $image_data
 							);		
 				$insert = $this->Admin_Model->insert('category',$data);
@@ -324,22 +323,153 @@ class Admin extends MY_Controller {
 		return redirect('admin/category');
 	}	
 
-	public function product_requests($id="")
+	public function lab_test()
+	{
+		checkadminlogin();		
+		#$data['product']=$this->Admin_Model->select('products',['vender_id'=>$restaurant_id,'is_approved'=>'1','is_deleted'=>'0']);
+		myview('admin/lab_test');
+	}	
+
+	public function add_lab_test()
 	{
 		checkadminlogin();
-		if(!empty($id))
+
+		$data['category']=$this->Admin_Model->select('category',['status'=>'1','is_deleted'=>'0']);
+		if(!empty($_POST))
 		{
-			$id=base64_decode($id);		
-			$data['selected_product'] = $this->Admin_Model->select('products',['is_approved'=>'1','vender_id'=>$id]);		
-			myview('admin/store_products',$data);
+			$this->form_validation->set_rules('cat_name', 'Category Name', 'trim|required');
+			$this->form_validation->set_rules('name', 'Name', 'trim|required');
+			$this->form_validation->set_rules('price', 'Price', 'trim|required');
+			$this->form_validation->set_rules('preparation', 'Preparation', 'trim|required');
+			$this->form_validation->set_rules('do_dont', "Do & Don't", 'trim|required');
+			$this->form_validation->set_rules('components', 'Components', 'trim|required');
+			$this->form_validation->set_rules('use_of_test', 'Use of Test', 'trim|required');
+			$this->form_validation->set_rules('test_info', 'Test Information', 'trim|required');
+			
+			if (empty($_FILES['thumb_img']['name'])) {
+				$this->form_validation->set_rules('thumb_img', 'Thumb Images', 'required');
+			}
+			if (empty($_FILES['item_image']['name'])) {
+				$this->form_validation->set_rules('item_image', 'Item Images', 'required');
+			}
+
+			if($this->form_validation->run()==FALSE){
+
+				myview('admin/add_lab_test',$data);
+			}else{
+				
+				$thumb_img = uploadfile('thumb_img','assets/test_image/');	
+				$image_data = uploadfile('item_image','assets/test_image/');	
+				$data = array(
+								'name' => $this->input->post('name'),
+								'price' => $this->input->post('price'),
+								'preparation' => $this->input->post('preparation'),
+								'cat_id' => $this->input->post('cat_name'),
+								'do_dont' => $this->input->post('do_dont'),								
+								'use_of_test' => $this->input->post('use_of_test'),								
+								'test_info' => $this->input->post('test_info'),								
+								'thumb_img' => '/assets/test_image/'.$thumb_img,								
+								'galary_img' => '/assets/test_image/'.$image_data,								
+								'components' => $this->input->post('components')								
+							);
+				$insert = $this->Admin_Model->insert('lab_test',$data);
+				if($insert)
+				{
+					$this->session->set_flashdata('message',"Test Added Successfully");
+					return redirect('admin/lab_test');
+				}				
+			}
+		}else{
+			myview('admin/add_lab_test',$data);
 		}
-		else
-		{
-			$data['select_request'] = $this->Admin_Model->select('products',['is_approved'=>'0']);		
-			myview('admin/product_request',$data);
-		}
-		
 	}
+
+	public function item_status($ide)
+    {
+		checkadminlogin();
+        if(!empty($ide))
+        {
+            $id=base64_decode($ide);            
+			$check = $this->Admin_Model->selectrow('products',['id'=>$id]);
+			$value = ($check->status==1)?'0':'1';
+			$msg=($value=='1')?'Product active successfully':'Product inactive successfully';
+			
+			$this->Admin_Model->update('products',['status'=>$value],['id'=>$check->id]);
+            $this->session->set_flashdata('message',$msg);
+            return redirect('restaurant/product');
+        }else{
+            return redirect('restaurant/product');
+        }
+	}
+
+	public function delete_item($ide)
+	{
+		checkadminlogin();
+		$id=base64_decode($ide);
+		$this->Admin_Model->update('products',['is_deleted'=>'1'],['id'=>$id]);
+		$this->session->set_flashdata('message',"Item delete successfully");
+		return redirect('restaurant/product');
+	}
+
+	public function edit_item($id)
+	{
+		checkadminlogin();
+		$id = base64_decode($id);
+		$restaurant_id = $this->session->userdata('loginrestaurant')->id;
+		$data['products']=$this->Admin_Model->selectrow('products',['id'=>$id]);
+		$data['category']=$this->Admin_Model->select('category',['type'=>'1','status'=>'1','is_deleted'=>'0']);
+		$data['sub_category']=$this->Admin_Model->select('sub_category',['category_type'=>'1','status'=>'1','is_deleted'=>'0','category_id'=>$data['products']->cat_id]);
+
+		if(!empty($_POST))
+		{
+			$this->form_validation->set_rules('cat_name', 'Category Name', 'trim|required');
+			$this->form_validation->set_rules('name', 'Name', 'trim|required');
+			$this->form_validation->set_rules('price', 'Price', 'trim|required');
+			$this->form_validation->set_rules('item_description', 'Description', 'trim|required');
+			
+			if($this->form_validation->run()==FALSE){
+				myview('restaurant/editproduct',$data);
+			}else{				
+				
+				$data = array(
+					'name' => ucfirst($this->input->post('name')),
+					'price' => $this->input->post('price'),
+					'item_description' => $this->input->post('item_description'),
+					'vender_id' => $restaurant_id,
+					'cat_id' => $this->input->post('cat_name'),
+					'subcat_id' => $this->input->post('subcat_name'),								
+					'other_details' => $this->input->post('other_details')								
+				);
+				
+				$insert = $this->Admin_Model->update('products',$data,['id'=>$id]);
+				if($insert)
+				{				
+					$this->session->set_flashdata('message',"Product Update successfully");
+					return redirect('restaurant/product');
+				}				
+			}
+		}else{
+			myview('restaurant/editproduct',$data);
+		}
+	}
+
+
+	// public function product_requests($id="")
+	// {
+	// 	checkadminlogin();
+	// 	if(!empty($id))
+	// 	{
+	// 		$id=base64_decode($id);		
+	// 		$data['selected_product'] = $this->Admin_Model->select('products',['is_approved'=>'1','vender_id'=>$id]);		
+	// 		myview('admin/store_products',$data);
+	// 	}
+	// 	else
+	// 	{
+	// 		$data['select_request'] = $this->Admin_Model->select('products',['is_approved'=>'0']);		
+	// 		myview('admin/product_request',$data);
+	// 	}
+		
+	// }
 
 	public function restaurant_items($id="")
 	{

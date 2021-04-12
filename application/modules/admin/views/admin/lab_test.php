@@ -12,8 +12,8 @@
             </div>
             <div class="col-sm-3">
                 <div class="btn-group float-sm-right">
-                    <a href="<?=base_url('admin/addCategory')?>" class="btn btn-outline-primary waves-effect waves-light">
-                        Add Category</a>
+                    <a href="<?=base_url('admin/add_lab_test')?>" class="btn btn-outline-primary waves-effect waves-light">
+                        Add Test</a>
                 </div>
             </div>
         </div>
@@ -21,41 +21,44 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i> Category List</div>
+                    <div class="card-header"><i class="fa fa-table"></i>Test List</div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="default-datatable" class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Sl No.</th>
-                                        <th>Name</th>
-                                        <th>Image</th>                                     
+                                        <th>Product Name</th>
+                                        <th>Product Price</th>
+                                        <th>Product Description</th>            
                                         <th>Status</th>										
 										<th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php $i=1; foreach($category as $key) { ?>
+                                <!-- <tbody>
+                                    <?php $i=1; foreach($product as $key) { ?>
                                     <tr>
                                         <td><?=$i++?></td>
-                                        <td><?=$key->name?></td>
-                                        <td><img width='180px' height="120px" src="<?=base_url('assets/category_img/').$key->img?>"></td>
+                                        <td><?=ucfirst($key->name)?></td>
+                                        <td><?=$key->price?>Rs.</td>
+                                        <td><?=$key->item_description?></td>                                      
                                         <td>
                                             <?php if($key->status=='1'){ ?>
-                                            <a href="<?=base_url('admin/categoryStatus/').base64_encode($key->id)?>" class="badge badge-success">Active</a>
+                                            <a href="<?=base_url('restaurant/item_status/').base64_encode($key->id)?>" class="badge badge-success">Active</a>
                                             <?php } else {?>
-                                            <a href="<?=base_url('admin/categoryStatus/').base64_encode($key->id)?>" class="badge badge-danger">Inactive</a>
+                                            <a href="<?=base_url('restaurant/item_status/').base64_encode($key->id)?>" class="badge badge-danger">Inactive</a>
                                             <?php } ?>
                                         </td>
                                         
-                                        <td>
-                                            <a class="btn-sm btn-success" href="<?=base_url('admin/edit_category/').base64_encode($key->id)?>">Edit</a>
-                                            <a class="btn-sm btn-danger" onclick="return confirm('Are you sure want to delete')" href="<?=base_url('admin/categorydelete/').base64_encode($key->id)?>">Delete</a>
+                                        <td>  
+                                            <a class="btn-sm btn-success" href="<?=base_url('restaurant/item_image/').base64_encode($key->id)?>">Manage Item Image</a>
+                                            <a class="btn-sm btn-success" href="<?=base_url('restaurant/edit_item/').base64_encode($key->id)?>">Edit</a>
+                                            <a class="btn-sm btn-danger" onclick="return confirm('Are you sure want to delete')" href="<?=base_url('restaurant/delete_item/').base64_encode($key->id)?>">Delete</a>
 
                                         </td>
                                     </tr>
                                     <?php } ?>
-                                </tbody>
+                                </tbody> -->
                             </table>
                         </div>
                     </div>
