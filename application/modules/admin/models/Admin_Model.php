@@ -53,11 +53,11 @@ class Admin_Model extends CI_Model
 
 	}
 
-	public function join_select($select,$tbl1,$tbl2,$on,$con='')
+	public function join_select($select,$tbl1,$tbl2,$on,$type,$con='')
 	{
 		$this->db->select($select);
 		$this->db->from($tbl1);
-		$this->db->join($tbl2, $on, 'INNER');	
+		$this->db->join($tbl2, $on, $type);	
 		if ($con)
 			$this->db->where($con);
 		$q = $this->db->get();

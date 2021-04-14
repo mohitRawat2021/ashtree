@@ -28,37 +28,44 @@
                                 <thead>
                                     <tr>
                                         <th>Sl No.</th>
-                                        <th>Product Name</th>
-                                        <th>Product Price</th>
-                                        <th>Product Description</th>            
+                                        <th>Category Name</th>
+                                        <th>Test Name</th>
+                                        <th>Test Price</th>
+                                        <th>Components</th>            
+                                        <th>Thumb Image</th>            
+                                        <th>Galary Image</th>            
                                         <th>Status</th>										
 										<th>Action</th>
                                     </tr>
                                 </thead>
-                                <!-- <tbody>
-                                    <?php $i=1; foreach($product as $key) { ?>
+                                <tbody>
+                                    <?php $i=1; foreach($lab_test as $key) { ?>
                                     <tr>
                                         <td><?=$i++?></td>
+                                        <td><?=ucfirst($key->cat_name)?></td>
                                         <td><?=ucfirst($key->name)?></td>
                                         <td><?=$key->price?>Rs.</td>
-                                        <td><?=$key->item_description?></td>                                      
+                                        <td><?=$key->components?></td>
+                                        <td><img width='180px' height="120px" src="<?=base_url($key->thumb_img)?>"></td>
+                                        <td><img width='180px' height="120px" src="<?=base_url($key->galary_img)?>"></td>
+                                
                                         <td>
                                             <?php if($key->status=='1'){ ?>
-                                            <a href="<?=base_url('restaurant/item_status/').base64_encode($key->id)?>" class="badge badge-success">Active</a>
+                                            <a href="<?=base_url('admin/test_status/').base64_encode($key->id)?>" class="badge badge-success">Active</a>
                                             <?php } else {?>
-                                            <a href="<?=base_url('restaurant/item_status/').base64_encode($key->id)?>" class="badge badge-danger">Inactive</a>
+                                            <a href="<?=base_url('admin/test_status/').base64_encode($key->id)?>" class="badge badge-danger">Inactive</a>
                                             <?php } ?>
                                         </td>
                                         
                                         <td>  
-                                            <a class="btn-sm btn-success" href="<?=base_url('restaurant/item_image/').base64_encode($key->id)?>">Manage Item Image</a>
-                                            <a class="btn-sm btn-success" href="<?=base_url('restaurant/edit_item/').base64_encode($key->id)?>">Edit</a>
-                                            <a class="btn-sm btn-danger" onclick="return confirm('Are you sure want to delete')" href="<?=base_url('restaurant/delete_item/').base64_encode($key->id)?>">Delete</a>
+                                            <!-- <a class="btn-sm btn-success" href="<?=base_url('admin/item_image/').base64_encode($key->id)?>">Manage Item Image</a> -->
+                                            <a class="btn-sm btn-success" href="<?=base_url('admin/edit_lab_test/').base64_encode($key->id)?>">Edit</a>
+                                            <a class="btn-sm btn-danger" onclick="return confirm('Are you sure want to delete')" href="<?=base_url('admin/delete_test/').base64_encode($key->id)?>">Delete</a>
 
                                         </td>
                                     </tr>
                                     <?php } ?>
-                                </tbody> -->
+                                </tbody>
                             </table>
                         </div>
                     </div>

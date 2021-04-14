@@ -13,8 +13,8 @@ function uploadfile($name,$location)  //upload method
       // $this->form_validation->set_rules($name, 'Document', 'required');
     $config['upload_path']      = $location;
     $config['allowed_types']    = 'gif|jpg|png';          
-    $config['file_name']        = date('ymdhis').$name;   
-
+    $config['file_name']        = date('ymdhis').$_FILES[$name]['name'];
+    
     $ci->upload->initialize($config);
     $ci->load->library('upload', $config);
    

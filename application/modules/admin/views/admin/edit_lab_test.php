@@ -12,7 +12,7 @@
             </div>
             <div class="col-sm-3">
                 <div class="btn-group float-sm-right">
-                    <a href="<?=base_url('restaurant/product')?>" class="btn btn-outline-primary waves-effect waves-light">Item List</a>
+                    <a href="<?=base_url('admin/lab_test')?>" class="btn btn-outline-primary waves-effect waves-light">Lab Test List</a>
                 </div>
             </div>
         </div>
@@ -23,10 +23,10 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-title">Edit Product</div>
+                        <div class="card-title">Add Lab Test</div>
                         <hr>
-                        <form method="post" action="<?=base_url('restaurant/edit_item/').$this->uri->segment('3')?>"> 
-                        <div class="form-group row">
+                        <form method="post" action="<?=base_url('admin/edit_lab_test/').$this->uri->segment('3')?>" id="all_mall" enctype="multipart/form-data"> 
+                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Category</label>
                                 <div class="col-sm-3">
                                     <select class="form-control form-control-square"  name="cat_name" id="cat_name">
@@ -35,7 +35,7 @@
                                         foreach($category as $v)
                                         {
                                         ?>
-                                            <option value="<?=$v->id?>" <?=$products->cat_id == $v->id ? 'selected' : ''?>><?=ucfirst($v->name)?></option>
+                                            <option value="<?=$v->id?>" <?=$lab_test->cat_id == $v->id ? 'selected' : ''?>><?=ucfirst($v->name)?></option>
                                         <?php
                                         }
                                         ?>
@@ -44,56 +44,80 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Sub-Category </label>
-                                    <div class="col-sm-3">
-                                        <select class="form-control" name="subcat_name" id="subcat_name">
-                                            <option value="">Select Sub-Category</option>
-                                            <?php                                        
-                                            foreach($sub_category as $v)
-                                            {
-                                            ?>
-                                                <option value="<?=$v->id?>" <?=$products->subcat_id == $v->id ? 'selected' : ''?>><?=ucfirst($v->name)?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>                                 
-                                    </div>
-                            </div> 
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Item Name</label>
+                                <label class="col-sm-2 col-form-label">Test Name</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control form-control-square" name="name" value="<?=$products->name?>" placeholder="Enter item Name">
+                                    <input type="text" class="form-control form-control-square" name="name" value="<?=$lab_test->name?>" placeholder="Enter test Name">
                                     <?=form_error('name')?>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Item Price</label>
+                                <label class="col-sm-2 col-form-label">Test Price</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control form-control-square" name="price" value="<?=$products->price?>" placeholder="Enter item Price">
+                                    <input type="text" class="form-control form-control-square" name="price" value="<?=$lab_test->price?>" placeholder="Enter test Price">
                                     <?=form_error('price')?>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Item Descriptions</label>
+                                <label class="col-sm-2 col-form-label">Preparation for test</label>
                                 <div class="col-sm-3">
-                                    <textarea class="form-control form-control-square" name="item_description"><?=set_value('item_description')?><?=$products->item_description?></textarea>
-                                    <?=form_error('item_description')?>
+                                    <input type="text" class="form-control form-control-square" name="preparation" value="<?=$lab_test->preparation?>" placeholder="Preparation">
+                                    <?=form_error('preparation')?>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Other Details</label>
+                                <label class="col-sm-2 col-form-label">Do & Don't</label>
                                 <div class="col-sm-3">
-                                    <textarea class="form-control form-control-square" name="other_details"><?=set_value('name')?><?=$products->other_details?></textarea>
-                                    <?=form_error('other_details')?>
+                                    <textarea class="form-control form-control-square" placeholder="Do & Don't" name="do_dont"><?=$lab_test->do_dont?></textarea>
+                                    <?=form_error('do_dont')?>
                                 </div>
                             </div>
-                                                    
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Components</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control form-control-square" name="components" value="<?=$lab_test->components?>" placeholder="Components">
+                                    <?=form_error('components')?>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Use of test</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control form-control-square" name="use_of_test" value="<?=$lab_test->use_of_test?>" placeholder="Use of Test">
+                                    <?=form_error('use_of_test')?>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Test Thumb Image</label>
+                                <div class="col-sm-3">
+                                    <input type="file" class="form-control form-control-square" name="thumb_img">
+                                    <?=form_error('thumb_img')?>
+                                </div>
+                                <div class="col-sm-3">
+                                    <img width="140px" height="120px" src="<?=base_url($lab_test->thumb_img)?>">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Galary Image</label>
+                                <div class="col-sm-3">
+                                    <input type="file" class="form-control form-control-square" name="item_image">
+                                    <?=form_error('item_image')?>
+                                </div>
+                                <div class="col-sm-3">
+                                    <img width="140px" height="120px" src="<?=base_url($lab_test->galary_img)?>">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Tests Information</label>
+                                <div class="col-sm-3">
+                                    <textarea class="form-control form-control-square" placeholder="Test Information" name="test_info"><?=set_value('test_info')?><?=$lab_test->test_info?></textarea>
+                                    <?=form_error('test_info')?>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label"></label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-1">
                                     <button type="submit"
                                         class="btn btn-primary shadow-primary btn-square">
-                                        Update</button>
+                                        Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -104,9 +128,9 @@
         <!--End Row-->
 
     </div>
- 
-<?php include('include/footer.php')?>
-<script>
+</div>
+    <?php include('include/footer.php')?>
+    <script>
         $(document).ready(function(){
             $('#cat_name').on('change',function(){
 
