@@ -1,5 +1,5 @@
 <?php
-class Restaurant_Model extends CI_Model
+class Lab_Model extends CI_Model
 {
 	public function select($tbl,$con='',$con1='',$con2='',$con3='')
 	{
@@ -127,16 +127,14 @@ class Restaurant_Model extends CI_Model
 		$this->db->where($con);
 		return $this->db->delete($tbl);
 	}
-	// ------------------------------------------
+	
+	public function select_single_row($column_name,$table,$con='') {
 
-	// public function get_question_list()
-	// {
-	// 	$q=$this->db->select('q.*, s.subject,')
-	// 	->from('quiz as q')
-	// 	->join('subjects as s', 'q.subject_id=s.id')
-	// 	->get()->result();
-	// 	return $q;
-	// }
+        $get_column_name = implode(',',$column_name);
+        $this->db->select($get_column_name)->from($table)->where($con);
+        $res = $this->db->get()->row();
+        return $res;
+    }
 
 
 }

@@ -351,6 +351,7 @@ class Admin extends MY_Controller {
 			$this->form_validation->set_rules('components', 'Components', 'trim|required');
 			$this->form_validation->set_rules('use_of_test', 'Use of Test', 'trim|required');
 			$this->form_validation->set_rules('test_info', 'Test Information', 'trim|required');
+			$this->form_validation->set_rules('home_visit', 'Home Visit', 'trim|required');
 			
 			if (empty($_FILES['thumb_img']['name'])) {
 				$this->form_validation->set_rules('thumb_img', 'Thumb Images', 'required');
@@ -374,6 +375,7 @@ class Admin extends MY_Controller {
 								'do_dont' => $this->input->post('do_dont'),								
 								'use_of_test' => $this->input->post('use_of_test'),								
 								'test_info' => $this->input->post('test_info'),								
+								'home_visit' => $this->input->post('home_visit'),								
 								'thumb_img' => '/assets/test_image/'.$thumb_img,								
 								'galary_img' => '/assets/test_image/'.$image_data,								
 								'components' => $this->input->post('components')								
@@ -408,6 +410,8 @@ class Admin extends MY_Controller {
 			$this->form_validation->set_rules('components', 'Components', 'trim|required');
 			$this->form_validation->set_rules('use_of_test', 'Use of Test', 'trim|required');
 			$this->form_validation->set_rules('test_info', 'Test Information', 'trim|required');
+			$this->form_validation->set_rules('home_visit', 'Home Visit', 'trim|required');
+
 			
 			// if (empty($_FILES['thumb_img']['name'])) {
 			// 	$this->form_validation->set_rules('thumb_img', 'Thumb Images', 'required');
@@ -437,6 +441,7 @@ class Admin extends MY_Controller {
 				$data2['use_of_test'] = $this->input->post('use_of_test');								
 				$data2['test_info'] = $this->input->post('test_info');								
 				$data2['components'] = $this->input->post('components');							
+				$data2['home_visit'] = $this->input->post('home_visit');							
 				
 				$insert = $this->Admin_Model->update('lab_test',$data2,['id'=>$id]);
 				if($insert)
@@ -828,12 +833,42 @@ class Admin extends MY_Controller {
     //     }
 	// }
 
+	public function lab_timing($ide)
+	{
+		checkadminlogin();
+		$id=base64_decode($ide);
+		$data['sun']=$this->Admin_Model->selectrow('lab_timing',['status'=>'2','lab_id'=>$id,'days'=>'0']);
+		$data['mon']=$this->Admin_Model->selectrow('lab_timing',['status'=>'2','lab_id'=>$id,'days'=>'1']);
+		$data['tue']=$this->Admin_Model->selectrow('lab_timing',['status'=>'2','lab_id'=>$id,'days'=>'2']);
+		$data['wed']=$this->Admin_Model->selectrow('lab_timing',['status'=>'2','lab_id'=>$id,'days'=>'3']);
+		$data['thus']=$this->Admin_Model->selectrow('lab_timing',['status'=>'2','lab_id'=>$id,'days'=>'4']);
+		$data['fri']=$this->Admin_Model->selectrow('lab_timing',['status'=>'2','lab_id'=>$id,'days'=>'5']);
+		$data['sat']=$this->Admin_Model->selectrow('lab_timing',['status'=>'2','lab_id'=>$id,'days'=>'6']);
+
+		if(!empty($_POST))
+		{	
+			$this->Admin_Model->delete('lab_timing',['lab_id'=>$id]);
+
+			foreach($this->input->post('days') as $k=>$v)
+			{	
+					$this->Admin_Model->insert('lab_timing',['lab_id'=>$id,'days'=>$v,'o_time'=>$this->input->post('open')[$v],'status'=>'2','c_time'=>$this->input->post('close')[$v]]);
+			}	
+			
+			
+					$this->session->set_flashdata('message',"Labs added successfully");
+					return redirect($_SERVER['HTTP_REFERER']);
+			
+		}else{
+			myview('admin/lab_timing',$data);
+		}
+		
+	}
 	
 	public function labs()
 	{
 		checkadminlogin();
-		#$data['labs']=$this->Admin_Model->select('labs',['is_deleted'=>'0']);
-		myview('admin/labs');
+		$data['labs']=$this->Admin_Model->select('labs',['is_deleted'=>'0']);
+		myview('admin/labs',$data);
 	}	
 
 	public function add_labs()
@@ -841,157 +876,145 @@ class Admin extends MY_Controller {
 		checkadminlogin();
 		if(!empty($_POST))
 		{	
-			// if (empty($_FILES['img']['name'])) {
-			// 	$this->form_validation->set_rules('img', 'Images', 'required');
-			// }
 			$this->form_validation->set_rules('name', 'Name', 'trim|required');
 			$this->form_validation->set_rules('email', 'Email Id', 'trim|required');
 			$this->form_validation->set_rules('mobile', 'Mobile Number', 'trim|required');
-			$this->form_validation->set_rules('driving_license', 'Driving License', 'trim|required');
-			$this->form_validation->set_rules('delivery_area', 'Delivery Area', 'trim|required');
-			$this->form_validation->set_rules('bank_name', 'Name', 'trim|required');
+			$this->form_validation->set_rules('lab_address', 'Delivery Area', 'trim|required');
+			$this->form_validation->set_rules('bank_name', 'Bank Name', 'trim|required');
 			$this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|required');
-			$this->form_validation->set_rules('ifsc_code', 'Name', 'trim|required');
-			$this->form_validation->set_rules('branch_name', 'Name', 'trim|required');
-			$this->form_validation->set_rules('account_number', 'Name', 'trim|required');
-			$this->form_validation->set_rules('password', 'Name', 'trim|required');
+			$this->form_validation->set_rules('ifsc_code', 'IFSC code', 'trim|required');
+			$this->form_validation->set_rules('branch_name', 'Branch Name', 'trim|required');
+			$this->form_validation->set_rules('account_number', 'Acoount Number', 'trim|required');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required');
+			$this->form_validation->set_rules('admin_commission', 'Account Number', 'trim|required');
+
 
 			if($this->form_validation->run()==FALSE){
-				myview('admin/add_delivery_boy');
-			}else{				
-				$image_data = uploadfile('img','assets/deliverboy_profile/');			
+				myview('admin/add_labs');
+			}else{							
 				$data = array(
 								'name' => ucfirst($this->input->post('name')),
 								'email' => $this->input->post('email'),								
-								'mobile' => $this->input->post('mobile'),								
-								'driving_license' => $this->input->post('driving_license'),								
-								'delivery_area' => $this->input->post('delivery_area'),																	
+								'mobile' => $this->input->post('mobile'),
+								'lab_address' => $this->input->post('lab_address'),																	
 								'longitude' => $this->input->post('longitude'),								
 								'latitude' => $this->input->post('latitude'),							
 								'bank_name' => $this->input->post('bank_name'),								
 								'account_holder_name' => $this->input->post('account_holder_name'),								
 								'ifsc_code' => $this->input->post('ifsc_code'),								
 								'branch_name' => $this->input->post('branch_name'),								
-								'account_number' => $this->input->post('account_number'),								
-								'password' => password_hash($this->input->post('password'),PASSWORD_DEFAULT),							
-								'profile_img' => $image_data
+								'account_number' => $this->input->post('account_number'),
+								'admin_commission' => $this->input->post('admin_commission'),								
+								'password' => password_hash($this->input->post('password'),PASSWORD_DEFAULT)
 							);		
-				$insert = $this->Admin_Model->insert('delivery_boy',$data);
+				$insert = $this->Admin_Model->insert('labs',$data);
 				if($insert)
 				{
-					$this->session->set_flashdata('message',"Delivery Boy add successfully");
-					return redirect('admin/delivery_boy');
+					$this->session->set_flashdata('message',"Labs added successfully");
+					return redirect('admin/labs');
 				}				
 			}
 		}else{
-			myview('admin/add_delivery_boy');
+			myview('admin/add_labs');
 		}
 	}
 
-	// public function view_delivery_boy_details($id='')
-	// {
-	// 	checkadminlogin();		
-	// 	if(!empty($id))
-	// 	{			
-	// 		$id=base64_decode($id);  
+	public function view_lab_details($id='')
+	{
+		checkadminlogin();		
+		if(!empty($id))
+		{			
+			$id=base64_decode($id);  
 
-	// 		$data['delivery_boy'] =  $this->Admin_Model->selectrow('delivery_boy',['id'=>$id]);
-	// 		myview('admin/view_delivery_boy_details',$data);			
-	// 	}
-	// 	else
-	// 	{
-	// 		redirect('admin/delivery_boy');
-	// 	}
-	// }
+			$data['labs'] =  $this->Admin_Model->selectrow('labs',['id'=>$id]);
+			myview('admin/view_lab_details',$data);			
+		}
+		else
+		{
+			redirect('admin/labs');
+		}
+	}
 
-	// public function edit_delivery_boy_details($id)
-	// {
-	// 	checkadminlogin();
-	// 	$id=base64_decode($id); 
-	// 	$data['delivery_boy'] =  $this->Admin_Model->selectrow('delivery_boy',['id'=>$id]);
-	// 	if(!empty($_POST))
-	// 	{	
-	// 		// if (empty($_FILES['img']['name'])) {
-	// 		// 	$this->form_validation->set_rules('img', 'Images', 'required');
-	// 		// }
-	// 		$this->form_validation->set_rules('name', 'Name', 'trim|required');
-	// 		$this->form_validation->set_rules('email', 'Email Id', 'trim|required');
-	// 		$this->form_validation->set_rules('mobile', 'Mobile Number', 'trim|required');
-	// 		$this->form_validation->set_rules('driving_license', 'Driving License', 'trim|required');
-	// 		$this->form_validation->set_rules('delivery_area', 'Delivery Area', 'trim|required');
-	// 		$this->form_validation->set_rules('bank_name', 'Name', 'trim|required');
-	// 		$this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|required');
-	// 		$this->form_validation->set_rules('ifsc_code', 'Name', 'trim|required');
-	// 		$this->form_validation->set_rules('branch_name', 'Name', 'trim|required');
-	// 		$this->form_validation->set_rules('account_number', 'Name', 'trim|required');
+	public function edit_labs($id)
+	{
+		checkadminlogin();
+		$id=base64_decode($id); 
+		$data['labs'] =  $this->Admin_Model->selectrow('labs',['id'=>$id]);
+		if(!empty($_POST))
+		{
+			$this->form_validation->set_rules('name', 'Name', 'trim|required');
+			$this->form_validation->set_rules('email', 'Email Id', 'trim|required');
+			$this->form_validation->set_rules('mobile', 'Mobile Number', 'trim|required');
+			$this->form_validation->set_rules('lab_address', 'Delivery Area', 'trim|required');
+			$this->form_validation->set_rules('bank_name', 'Bank Name', 'trim|required');
+			$this->form_validation->set_rules('account_holder_name', 'Account Holder Name', 'trim|required');
+			$this->form_validation->set_rules('ifsc_code', 'IFSC code', 'trim|required');
+			$this->form_validation->set_rules('branch_name', 'Branch Name', 'trim|required');
+			$this->form_validation->set_rules('account_number', 'Account Number', 'trim|required');
+			$this->form_validation->set_rules('admin_commission', 'Account Number', 'trim|required');
 
-	// 		if($this->form_validation->run()==FALSE){
+			if($this->form_validation->run()==FALSE){
 				
-	// 			myview('admin/edit_delivery_boy',$data);
-	// 		}else{				
+				myview('admin/edit_labs',$data);
+			}else{				
 
-	// 			if (!empty($_FILES['img']['name'])) 
-	// 			{
-	// 				$image_data = uploadfile('img','assets/deliverboy_profile/');
-	// 				$data2['profile_img'] = $image_data;		
-	// 			}
-
-	// 			if ($this->input->post('password')) 
-	// 			{
-	// 				$data2['password'] = password_hash($this->input->post('password'),PASSWORD_DEFAULT);		
-	// 			}
+				if ($this->input->post('password')) 
+				{
+					$data2['password'] = password_hash($this->input->post('password'),PASSWORD_DEFAULT);		
+				}
 							
 				
-	// 				$data2['name'] = ucfirst($this->input->post('name'));
-	// 				$data2['email'] = $this->input->post('email');						
-	// 				$data2['mobile'] = $this->input->post('mobile');								
-	// 				$data2['driving_license'] = $this->input->post('driving_license');								
-	// 				$data2['delivery_area'] = $this->input->post('delivery_area');								
-	// 				$data2['longitude'] = $this->input->post('longitude');								
-	// 				$data2['latitude'] = $this->input->post('latitude');								
-	// 				$data2['bank_name'] = $this->input->post('bank_name');								
-	// 				$data2['account_holder_name'] = $this->input->post('account_holder_name');								
-	// 				$data2['ifsc_code'] = $this->input->post('ifsc_code');								
-	// 				$data2['branch_name'] = $this->input->post('branch_name');								
-	// 				$data2['account_number'] = $this->input->post('account_number');
+					$data2['name'] = ucfirst($this->input->post('name'));
+					$data2['email'] = $this->input->post('email');						
+					$data2['mobile'] = $this->input->post('mobile');													
+					$data2['lab_address'] = $this->input->post('lab_address');								
+					$data2['longitude'] = $this->input->post('longitude');								
+					$data2['latitude'] = $this->input->post('latitude');								
+					$data2['bank_name'] = $this->input->post('bank_name');								
+					$data2['account_holder_name'] = $this->input->post('account_holder_name');								
+					$data2['ifsc_code'] = $this->input->post('ifsc_code');								
+					$data2['branch_name'] = $this->input->post('branch_name');								
+					$data2['account_number'] = $this->input->post('account_number');
+					$data2['admin_commission'] = $this->input->post('admin_commission');
 						
-	// 			$this->Admin_Model->update('delivery_boy',$data2,['id'=>$id]);
+				$this->Admin_Model->update('labs',$data2,['id'=>$id]);
 				
-	// 				$this->session->set_flashdata('message',"Delivery Boy Updated successfully");
-	// 				return redirect('admin/delivery_boy');
+					$this->session->set_flashdata('message',"Labs Updated successfully");
+					return redirect('admin/labs');
 				
 								
-	// 		}
-	// 	}else{
-	// 		myview('admin/edit_delivery_boy',$data);
-	// 	}
-	// }
+			}
+		}else{
+			myview('admin/edit_labs',$data);
+		}
+	}
 
-	// public function delivery_boy_status($ide)
-    // {
-	// 	checkadminlogin();
-    //     if(!empty($ide))
-    //     {
-    //         $id=base64_decode($ide);            
-	// 		$check = $this->Admin_Model->selectrow('delivery_boy',['id'=>$id]);
-	// 		$value = ($check->status==1)?'0':'1';
-	// 		$msg=($value=='1')?'Delivery Boy active successfully':'Delivery Boy inactive successfully';
+	public function labs_status($ide)
+    {
+		checkadminlogin();
+        if(!empty($ide))
+        {
+            $id=base64_decode($ide);            
+			$check = $this->Admin_Model->selectrow('labs',['id'=>$id]);
+			$value = ($check->status==1)?'0':'1';
+			$msg=($value=='1')?'Lab active successfully':'Lab inactive successfully';
 			
-	// 		$this->Admin_Model->update('delivery_boy',['status'=>$value],['id'=>$check->id]);
-    //         $this->session->set_flashdata('message',$msg);
-    //         return redirect('admin/delivery_boy');
-    //     }else{
-    //         return redirect('admin/delivery_boy');
-    //     }
-	// }
-	// public function delivery_boy_delete($ide)
-	// {
-	// 	checkadminlogin();
-	// 	$id=base64_decode($ide);
-	// 	$this->Admin_Model->update('delivery_boy',['is_deleted'=>'1'],['id'=>$id]);
-	// 	$this->session->set_flashdata('message',"Delivery Boy Delete successfully");
-	// 	return redirect('admin/delivery_boy');
-	// }	
+			$this->Admin_Model->update('labs',['status'=>$value],['id'=>$check->id]);
+            $this->session->set_flashdata('message',$msg);
+            return redirect('admin/labs');
+        }else{
+            return redirect('admin/labs');
+        }
+	}
+
+	public function lab_delete($ide)
+	{
+		checkadminlogin();
+		$id=base64_decode($ide);
+		$this->Admin_Model->update('labs',['is_deleted'=>'1'],['id'=>$id]);
+		$this->session->set_flashdata('message',"Lab Delete successfully");
+		return redirect('admin/labs');
+	}	
 
 	public function coupon()
 	{

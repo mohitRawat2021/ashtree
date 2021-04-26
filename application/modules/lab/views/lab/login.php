@@ -17,7 +17,7 @@
             </div>
 		 		<!-- <img src="<?=base_url()?>assets/images/logo-icon.png"> -->
 		 	</div>
-		  <div class="card-title text-uppercase text-center py-3">Restaurant Sign In</div>
+		  <div class="card-title text-uppercase text-center py-3">Lab Sign In</div>
 		    <form method="post" action="">
 			  <div class="form-group">
 			   <div class="position-relative has-icon-right">
@@ -47,7 +47,6 @@
 			  <a href="<?=base_url('restaurant/forget')?>">Reset Password</a>
 			 </div>
 			 <div class="form-group col-6 text-right">
-			  <a href="<?=base_url('restaurant/signup')?>">SignUp</a>
 			 </div>
 			</div>
 			 <button type="submit" class="btn btn-primary shadow-primary btn-round btn-block waves-effect waves-light">Sign In</button>

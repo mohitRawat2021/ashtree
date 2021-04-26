@@ -30,6 +30,14 @@ class Admin_Model extends CI_Model
 
 	}
 
+	public function select_single_row($column_name,$table,$con='') {
+
+        $get_column_name = implode(',',$column_name);
+        $this->db->select($get_column_name)->from($table)->where($con);
+        $res = $this->db->get()->row();
+        return $res;
+    }
+
 	public function select_hourly($tbl,$mall_id)
 	{
 		$this->db->select('*');

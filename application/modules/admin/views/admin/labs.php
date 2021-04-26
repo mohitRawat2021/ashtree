@@ -12,8 +12,8 @@
             </div>
             <div class="col-sm-3">
                 <div class="btn-group float-sm-right">
-                    <a href="<?=base_url('admin/add_deliverboy')?>" class="btn btn-outline-primary waves-effect waves-light">
-                        Add Delivery Boy</a>
+                    <a href="<?=base_url('admin/add_labs')?>" class="btn btn-outline-primary waves-effect waves-light">
+                        Add Lab</a>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header"><i class="fa fa-table"></i>Delivery Boy List</div>
+                    <div class="card-header"><i class="fa fa-table"></i>Lab's List</div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="default-datatable" class="table table-bordered">
@@ -36,8 +36,8 @@
 										<th>Action</th>
                                     </tr>
                                 </thead>
-                                <!-- <tbody>
-                                    <?php $i=1; foreach(@$delivery_boy as $key) { ?>
+                                <tbody>
+                                    <?php $i=1; foreach(@$labs as $key) { ?>
                                     <tr>
                                         <td><?=$i++?></td>
                                         <td><?=ucfirst($key->name)?></td>
@@ -46,21 +46,20 @@
                                         <td><?=date("d-m-Y", strtotime($key->created_at))?></td>
                                         <td>
                                             <?php if($key->status=='1'){ ?>
-                                            <a href="<?=base_url('admin/delivery_boy_status/').base64_encode($key->id)?>" class="badge badge-success">Active</a>
+                                            <a href="<?=base_url('admin/labs_status/').base64_encode($key->id)?>" class="badge badge-success">Active</a>
                                             <?php } else {?>
-                                            <a href="<?=base_url('admin/delivery_boy_status/').base64_encode($key->id)?>" class="badge badge-danger">Inactive</a>
+                                            <a href="<?=base_url('admin/labs_status/').base64_encode($key->id)?>" class="badge badge-danger">Inactive</a>
                                             <?php } ?>
                                         </td>
-                                        
                                         <td>
-                                            <a class="btn-sm btn-success" href="<?=base_url('admin/view_delivery_boy_details/').base64_encode($key->id)?>">More Details</a>
-                                            <a class="btn-sm btn-success" href="<?=base_url('admin/edit_delivery_boy_details/').base64_encode($key->id)?>">Edit</a>
-                                            <a class="btn-sm btn-danger" onclick="return confirm('Are you sure want to delete')" href="<?=base_url('admin/delivery_boy_delete/').base64_encode($key->id)?>">Delete</a>
-
+                                            <a class="btn-sm btn-success" href="<?=base_url('admin/lab_timing/').base64_encode($key->id)?>">Lab Timing Schedule</a>
+                                            <a class="btn-sm btn-success" href="<?=base_url('admin/view_lab_details/').base64_encode($key->id)?>">More Details</a>
+                                            <a class="btn-sm btn-success" href="<?=base_url('admin/edit_labs/').base64_encode($key->id)?>">Edit</a>
+                                            <a class="btn-sm btn-danger" onclick="return confirm('Are you sure want to delete')" href="<?=base_url('admin/lab_delete/').base64_encode($key->id)?>">Delete</a>
                                         </td>
                                     </tr>
                                     <?php } ?>
-                                </tbody> -->
+                                </tbody>
                             </table>
                         </div>
                     </div>

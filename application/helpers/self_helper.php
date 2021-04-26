@@ -54,21 +54,13 @@ function uploadfile($name,$location)  //upload method
   }
       return false;
 }
-  function checkstorelogin()
-  {
-    $ci = & get_instance();
-    if(empty($ci->session->userdata('loginstore')))
-    {
-      redirect('store/login');
-    }    
-  }
 
-  function checkrestaurantlogin()
+  function checklabslogin()
   {
     $ci = & get_instance();
-    if(empty($ci->session->userdata('loginrestaurant')))
+    if(empty($ci->session->userdata('loginlab')))
     {
-      redirect('restaurant/login');
+      redirect('lab/login');
     }    
   }
 
@@ -96,6 +88,13 @@ function uploadfile($name,$location)  //upload method
   {
     $ci = & get_instance();
     $ci->load->view('admin/'.$data,$data2);
+    return true;
+  }
+
+  function mylabview($data,$data2='')
+  {
+    $ci = & get_instance();
+    $ci->load->view('lab/'.$data,$data2);
     return true;
   }
 

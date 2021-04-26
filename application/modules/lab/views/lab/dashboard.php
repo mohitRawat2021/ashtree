@@ -15,7 +15,7 @@
                         <div class="media">
                             <div class="media-body text-left">
                                 <h4 class="text-white">12</h4>
-                                <span class="text-white">Total Number of Products</span>
+                                <span class="text-white">Total Upcoming Orders</span>
                             </div>
                             <div class="align-self-center w-circle-icon rounded-circle bg-contrast">
                                 <i class="icon-pin text-white"></i>

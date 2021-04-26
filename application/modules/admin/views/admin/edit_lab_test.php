@@ -113,6 +113,17 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Home Vist</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control form-control-square" name="home_visit" id="home_visit">
+                                            <option value="">Select</option>
+                                            <option value="0" <?=$lab_test->home_visit == "0" ? 'selected' : ''?>>Avaliable</option>                                       
+                                            <option value="1" <?=$lab_test->home_visit == "1" ? 'selected' : ''?>>Not-Avaliable</option>                                       
+                                    </select>
+                                    <?=form_error('home_visit')?>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-1">
                                     <button type="submit"

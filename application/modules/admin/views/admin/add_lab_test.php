@@ -45,65 +45,76 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Test Name</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <input type="text" class="form-control form-control-square" name="name" value="<?=set_value('name')?>" placeholder="Enter test Name">
                                     <?=form_error('name')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Test Price</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <input type="text" class="form-control form-control-square" name="price" value="<?=set_value('price')?>" placeholder="Enter test Price">
                                     <?=form_error('price')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Preparation for test</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <input type="text" class="form-control form-control-square" name="preparation" value="<?=set_value('preparation')?>" placeholder="Preparation">
                                     <?=form_error('preparation')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Do & Don't</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <textarea class="form-control form-control-square" placeholder="Do & Don't" name="do_dont"><?=set_value('do_dont')?></textarea>
                                     <?=form_error('do_dont')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Components</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <input type="text" class="form-control form-control-square" name="components" value="<?=set_value('components')?>" placeholder="Components">
                                     <?=form_error('components')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Use of test</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <input type="text" class="form-control form-control-square" name="use_of_test" value="<?=set_value('use_of_test')?>" placeholder="Use of Test">
                                     <?=form_error('use_of_test')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Test Thumb Image</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <input type="file" class="form-control form-control-square" name="thumb_img">
                                     <?=form_error('thumb_img')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Galary Image</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <input type="file" class="form-control form-control-square" name="item_image">
                                     <?=form_error('item_image')?>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Tests Information</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-8">
                                     <textarea class="form-control form-control-square" placeholder="Test Information" name="test_info"><?=set_value('test_info')?></textarea>
                                     <?=form_error('test_info')?>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Home Vist</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control form-control-square"  name="home_visit" id="home_visit">
+                                            <option value="">Select</option>
+                                            <option value="0">Avaliable</option>                                       
+                                            <option value="1">Not-Avaliable</option>                                       
+                                    </select>
+                                    <?=form_error('home_visit')?>
                                 </div>
                             </div>
                             <div class="form-group row">
