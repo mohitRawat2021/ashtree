@@ -60,31 +60,18 @@
                 <li>
                    <a href="<?=base_url('admin/category')?>"><i class="fa fa-dashcube"></i>Categories Management</a>
                 </li>
-                <!-- <li>
-                   <a href="<?=base_url('admin/sub_category')?>"><i class="fa fa-dashcube"></i>Manage Sub-Category</a>
-                </li> -->
                 <li>
                    <a href="<?=base_url('admin/lab_test')?>"><i class="fa fa-dashcube"></i>Lab Test Management</a>
                 </li>
                 <li>
+                   <a href="<?=base_url('admin/test_packages')?>"><i class="fa fa-dashcube"></i>Test Packages Management</a>
+                </li>
+                <li>
                    <a href="<?=base_url('admin/labs')?>"><i class="fa fa-dashcube"></i>Lab's Management</a>
                 </li>
-                <!-- <li>
-                    <a href="#" class="waves-effect">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span>Pending Request</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="<?=base_url('admin/registration_requests')?>"><i class="fa fa-circle-o-notch"></i>Registration Request</a></li>
-                        <li><a href="<?=base_url('admin/product_requests')?>"><i class="fa fa-circle-o-notch"></i>Product Request</a></li>
-                    </ul>
-                </li>              -->
                 <li>
                    <a href="<?=base_url('admin/manage_user')?>"><i class="fa fa-dashcube"></i>User Management</a>
-                </li>                
-                <!-- <li>
-                   <a href="<?=base_url('admin/manage_restaurant')?>"><i class="fa fa-dashcube"></i>Restaurant Management</a>
-                </li> -->               
+                </li>              
                 <li>
                    <a href="<?=base_url('admin/coupon')?>"><i class="fa fa-dashcube"></i>Manage Coupon</a>
                 </li>

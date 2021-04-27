@@ -482,47 +482,47 @@ class Admin extends MY_Controller {
 		return redirect('admin/lab_test');
 	}
 
-	public function edit_item($id)
-	{
-		checkadminlogin();
-		$id = base64_decode($id);
-		$restaurant_id = $this->session->userdata('loginrestaurant')->id;
-		$data['products']=$this->Admin_Model->selectrow('products',['id'=>$id]);
-		$data['category']=$this->Admin_Model->select('category',['type'=>'1','status'=>'1','is_deleted'=>'0']);
-		$data['sub_category']=$this->Admin_Model->select('sub_category',['category_type'=>'1','status'=>'1','is_deleted'=>'0','category_id'=>$data['products']->cat_id]);
+	// public function edit_item($id)
+	// {
+	// 	checkadminlogin();
+	// 	$id = base64_decode($id);
+	// 	$restaurant_id = $this->session->userdata('loginrestaurant')->id;
+	// 	$data['products']=$this->Admin_Model->selectrow('products',['id'=>$id]);
+	// 	$data['category']=$this->Admin_Model->select('category',['type'=>'1','status'=>'1','is_deleted'=>'0']);
+	// 	$data['sub_category']=$this->Admin_Model->select('sub_category',['category_type'=>'1','status'=>'1','is_deleted'=>'0','category_id'=>$data['products']->cat_id]);
 
-		if(!empty($_POST))
-		{
-			$this->form_validation->set_rules('cat_name', 'Category Name', 'trim|required');
-			$this->form_validation->set_rules('name', 'Name', 'trim|required');
-			$this->form_validation->set_rules('price', 'Price', 'trim|required');
-			$this->form_validation->set_rules('item_description', 'Description', 'trim|required');
+	// 	if(!empty($_POST))
+	// 	{
+	// 		$this->form_validation->set_rules('cat_name', 'Category Name', 'trim|required');
+	// 		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+	// 		$this->form_validation->set_rules('price', 'Price', 'trim|required');
+	// 		$this->form_validation->set_rules('item_description', 'Description', 'trim|required');
 			
-			if($this->form_validation->run()==FALSE){
-				myview('restaurant/editproduct',$data);
-			}else{				
+	// 		if($this->form_validation->run()==FALSE){
+	// 			myview('restaurant/editproduct',$data);
+	// 		}else{				
 				
-				$data = array(
-					'name' => ucfirst($this->input->post('name')),
-					'price' => $this->input->post('price'),
-					'item_description' => $this->input->post('item_description'),
-					'vender_id' => $restaurant_id,
-					'cat_id' => $this->input->post('cat_name'),
-					'subcat_id' => $this->input->post('subcat_name'),								
-					'other_details' => $this->input->post('other_details')								
-				);
+	// 			$data = array(
+	// 				'name' => ucfirst($this->input->post('name')),
+	// 				'price' => $this->input->post('price'),
+	// 				'item_description' => $this->input->post('item_description'),
+	// 				'vender_id' => $restaurant_id,
+	// 				'cat_id' => $this->input->post('cat_name'),
+	// 				'subcat_id' => $this->input->post('subcat_name'),								
+	// 				'other_details' => $this->input->post('other_details')								
+	// 			);
 				
-				$insert = $this->Admin_Model->update('products',$data,['id'=>$id]);
-				if($insert)
-				{				
-					$this->session->set_flashdata('message',"Product Update successfully");
-					return redirect('restaurant/product');
-				}				
-			}
-		}else{
-			myview('restaurant/editproduct',$data);
-		}
-	}
+	// 			$insert = $this->Admin_Model->update('products',$data,['id'=>$id]);
+	// 			if($insert)
+	// 			{				
+	// 				$this->session->set_flashdata('message',"Product Update successfully");
+	// 				return redirect('restaurant/product');
+	// 			}				
+	// 		}
+	// 	}else{
+	// 		myview('restaurant/editproduct',$data);
+	// 	}
+	// }
 
 
 	// public function product_requests($id="")
@@ -1501,6 +1501,153 @@ class Admin extends MY_Controller {
 			}	
 	
 	}
+
+	public function test_packages()
+	{
+		checkadminlogin();		
+		$data['test_packages']=$this->Admin_Model->select('test_packages',['is_deleted'=>'0']);
+	
+
+		myview('admin/test_packages',$data);
+	}	
+
+	public function add_test_packages()
+	{
+		checkadminlogin();
+
+		$data['lab_test']=$this->Admin_Model->select('lab_test',['status'=>'1','is_deleted'=>'0']);
+		if(!empty($_POST))
+		{
+			$this->form_validation->set_rules('cat_name[]', 'Test', 'trim|required');
+			$this->form_validation->set_rules('name', 'Name', 'trim|required');
+			$this->form_validation->set_rules('price', 'Price', 'trim|required');
+			$this->form_validation->set_rules('preparation', 'Preparation', 'trim|required');
+			$this->form_validation->set_rules('do_dont', "Do & Don't", 'trim|required');
+			$this->form_validation->set_rules('components', 'Components', 'trim|required');
+			$this->form_validation->set_rules('use_of_test', 'Use of Test', 'trim|required');
+			$this->form_validation->set_rules('test_info', 'Test Information', 'trim|required');
+			$this->form_validation->set_rules('home_visit', 'Home Visit', 'trim|required');
+			
+			if (empty($_FILES['thumb_img']['name'])) {
+				$this->form_validation->set_rules('thumb_img', 'Thumb Images', 'required');
+			}
+			if (empty($_FILES['item_image']['name'])) {
+				$this->form_validation->set_rules('item_image', 'Item Images', 'required');
+			}
+
+			if($this->form_validation->run()==FALSE){
+				myview('admin/add_test_packages',$data);
+			}else{
+				
+				$thumb_img = uploadfile('thumb_img','assets/test_image/');	
+				$image_data = uploadfile('item_image','assets/test_image/');	
+				$data = array(
+								'name' => $this->input->post('name'),
+								'price' => $this->input->post('price'),
+								'preparation' => $this->input->post('preparation'),
+								'test_id' => implode(',',$this->input->post('cat_name')),
+								'do_dont' => $this->input->post('do_dont'),								
+								'use_of_test' => $this->input->post('use_of_test'),								
+								'test_info' => $this->input->post('test_info'),								
+								'home_visit' => $this->input->post('home_visit'),								
+								'thumb_img' => '/assets/test_image/'.$thumb_img,								
+								'galary_img' => '/assets/test_image/'.$image_data,								
+								'components' => $this->input->post('components')								
+							);
+				$insert = $this->Admin_Model->insert('test_packages',$data);
+				if($insert)
+				{
+					$this->session->set_flashdata('message',"Package's Added Successfully");
+					return redirect('admin/test_packages');
+				}				
+			}
+		}else{
+			myview('admin/add_test_packages',$data);
+		}
+	}
+
+	public function edit_test_packages($eid)
+	{
+		checkadminlogin();
+		$id = base64_decode($eid);
+
+		$data['lab_test']=$this->Admin_Model->select('lab_test',['status'=>'1','is_deleted'=>'0']);		
+		$data['test_packages']=$this->Admin_Model->selectrow('test_packages',['id'=>$id]);
+
+		if(!empty($_POST))
+		{
+			$this->form_validation->set_rules('cat_name[]', 'Test', 'trim|required');
+			$this->form_validation->set_rules('name', 'Name', 'trim|required');
+			$this->form_validation->set_rules('price', 'Price', 'trim|required');
+			$this->form_validation->set_rules('preparation', 'Preparation', 'trim|required');
+			$this->form_validation->set_rules('do_dont', "Do & Don't", 'trim|required');
+			$this->form_validation->set_rules('components', 'Components', 'trim|required');
+			$this->form_validation->set_rules('use_of_test', 'Use of Test', 'trim|required');
+			$this->form_validation->set_rules('test_info', 'Test Information', 'trim|required');
+			$this->form_validation->set_rules('home_visit', 'Home Visit', 'trim|required');
+
+			if($this->form_validation->run()==FALSE){
+				myview('admin/edit_test_packages',$data);
+			}else{
+				if (!empty($_FILES['thumb_img']['name'])) {
+						$thumb_img = uploadfile('thumb_img','assets/test_image/');
+						$data2['thumb_img'] = '/assets/test_image/'.$thumb_img;
+					}
+				
+				if (!empty($_FILES['item_image']['name'])) {
+					$image_data = uploadfile('item_image','assets/test_image/');	
+					$data2['thumb_img'] = '/assets/test_image/'.$image_data;
+				}
+				
+				$data2['name'] = $this->input->post('name');
+				$data2['price'] = $this->input->post('price');
+				$data2['preparation'] = $this->input->post('preparation');
+				$data2['test_id'] =  implode(',',$this->input->post('cat_name'));
+				$data2['do_dont'] = $this->input->post('do_dont');								
+				$data2['use_of_test'] = $this->input->post('use_of_test');								
+				$data2['test_info'] = $this->input->post('test_info');								
+				$data2['components'] = $this->input->post('components');							
+				$data2['home_visit'] = $this->input->post('home_visit');							
+				
+				$insert = $this->Admin_Model->update('test_packages',$data2,['id'=>$id]);
+				if($insert)
+				{
+					$this->session->set_flashdata('message',"Package Updated Successfully");
+					return redirect('admin/test_packages');
+				}				
+			}
+		}else{
+			myview('admin/edit_test_packages',$data);
+		}
+	}
+
+	public function test_packages_status($ide)
+    {
+		checkadminlogin();
+        if(!empty($ide))
+        {
+            $id=base64_decode($ide);            
+			$check = $this->Admin_Model->selectrow('test_packages',['id'=>$id]);
+			$value = ($check->status==1)?'0':'1';
+			$msg=($value=='1')?'Package active successfully':'Package inactive successfully';
+			
+			$this->Admin_Model->update('test_packages',['status'=>$value],['id'=>$check->id]);
+            $this->session->set_flashdata('message',$msg);
+            return redirect('admin/test_packages');
+        }else{
+            return redirect('admin/test_packages');
+        }
+	}
+
+	public function delete_test_packages($ide)
+	{
+		checkadminlogin();
+		$id=base64_decode($ide);
+		$this->Admin_Model->update('test_packages',['is_deleted'=>'1'],['id'=>$id]);
+		$this->session->set_flashdata('message',"Package delete successfully");
+		return redirect('admin/test_packages');
+	}
+
 
 	
 }
